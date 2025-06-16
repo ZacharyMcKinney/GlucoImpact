@@ -1,1 +1,0 @@
-Use mssql (my sql) to connect to a local database instance
