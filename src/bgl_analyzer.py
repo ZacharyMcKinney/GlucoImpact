@@ -1,5 +1,4 @@
-# Copyright 2025, Zachary McKinney
-#
+## Copyright 2025, Zachary McKinney
 
 import sqlite3
 
@@ -12,7 +11,21 @@ class BGL_Analyzer:
         _user = user
         _db_connection = sqlite3.connection(db)
         _db_cursor = _db_connection.cursor()
-        
+    
+    #select the file location for food
+    def get_foods(self):
+        pass
+
+    #manually input foods which is a set    
+    def get_foods(self, foods):
+        pass
+    
+    #mainly for testing, but file location
+    def get_foods(self, file_location):
+        pass
+    
+    def get_bgl_spike(self, time):
+        pass
     
     #use lambda to make it easier to read and complete
     #set={}
