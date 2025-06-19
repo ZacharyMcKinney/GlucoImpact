@@ -2,7 +2,7 @@
 
 import sqlite3
 
-
+# Note to Self: Implement crud? create, retrieve, update, delete functions
 class BGL_Analyzer:
 
     #Initiate an Analyzer object with a dedicated user and uses the database associated with the user

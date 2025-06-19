@@ -19,6 +19,10 @@ matplotlib
 numpy
 pandas
 
+## Future Prospects
+- Creating downloadable app for the store (main goal afterwards)
+- Cloud storage for database instead of SQLite for local
+- Implementing a GUI for program (if there's no app)
 
 ## Copright
 
