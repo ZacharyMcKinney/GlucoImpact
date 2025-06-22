@@ -16,10 +16,10 @@ This project allows a user to take a picture of their food and associate those f
 
 
 ## Requirements
-Python 3.7+
-matplotlib
-numpy
-pandas
+-Python 3.7+
+-matplotlib
+-numpy
+-pandas
 
 ## Future Prospects
 - Creating downloadable app for the store (main goal afterwards)
