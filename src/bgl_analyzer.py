@@ -5,12 +5,72 @@ import sqlite3
 # Note to Self: Implement crud? create, retrieve, update, delete functions
 class BGL_Analyzer:
 
-    #Initiate an Analyzer object with a dedicated user and uses the database associated with the user
-    #User is a string ID, and DB is a filename to a Sqlite file or new file
+
     def __init__(self, user, db):
-        _user = user
-        _db_connection = sqlite3.connection(db)
-        _db_cursor = _db_connection.cursor()
+        """
+        Initiate an Analyzer object with a dedicated user and uses the database
+        associated with the user
+        User is a string ID, and DB is a filename to a Sqlite file or new file
+
+        Args:
+            user (str): user_id to be used in the database
+            db (str): filename to Sqlite database
+        """
+        
+        self.db_filename = db
+        self._user = user
+        self.connection = sqlite3.connection(self.db_filename)
+        self.cursor = self.connection.cursor()
+        self.cursor.execute("PRAGMA foreign_keys = ON;")
+        self._create_tables()
+        self.cursor.commit()
+        
+    def close_cursor(self):
+        """
+        Closes database cursor connection.
+        Init doesn't close it after intiating the cursor
+        """
+        self.cursor.close()
+        
+    
+    def _create_tables(self):
+        """
+        Creates tables if they don't exist int the database.
+        Has four tables in the database.
+        users, meal_consumed, food, and meal_items.
+        """
+        
+        self.cursor.execute("""
+                           CREATE TABLE IF NOT EXISTS users(
+                               user_id INTEGER PRIMARY KEY, 
+                               name TEXT)
+                           """)
+        self.cursor.execute("""
+                           CREATE TABLE IF NOT EXISTS meal_consumed(
+                               meal_id INTEGER PRIMARY KEY, 
+                               user_id INTEGER, 
+                               bgl_delta REAL, 
+                               date TEXT, 
+                               time_of_day TEXT,
+                               FOREIGN KEY (user_id) REFERENCES users(user_id))
+                           """)
+        self.cursor.execute("""
+                           CREATE TABLE IF NOT EXISTS food(
+                               food_id INTEGER PRIMARY KEY,
+                               food TEXT,
+                               carbs REAL,
+                               protein REAL,
+                               fat REAL)
+                           """)
+        self.cursor.execute("""
+                           CREATE TABLE IF NOT EXISTS meal_items(
+                               meal_id INTEGER, 
+                               food_id INTEGER, 
+                               portion INTEGER DEFAULT 1,
+                               PRIMARY KEY (meal_id, food_id),
+                               FOREIGN KEY (meal_id) REFERENCES meal_consumed(meal_id),
+                               FOREIGN KEY (food_id) REFERENCES food(food_id))
+                           """)
     
     #select the file location for food
     def get_foods(self):
@@ -82,5 +142,8 @@ class BGL_Analyzer:
     
     #update the all time average. Maybe include the date in the database avgerage. Could possibly display trend of BGL over time
     def _update_avg_BGL(self):
+        pass
+    
+    def print_database(self):
         pass
     

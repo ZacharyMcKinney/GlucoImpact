@@ -5,6 +5,8 @@ This project allows a user to take a picture of their food and associate those f
 ## Features
 - Helps a user know if a food could cause a blood glucose spike
 - Uses SQLite to store data locally
+- OpenAI for image identification
+- Python for easier data visualization
 
 
 ## Usage
