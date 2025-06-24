@@ -1,15 +1,25 @@
 # InsulinApp
 
 This project allows a user to take a picture of their food and associate those foods with an increase in BGL. 
+Users can understand how a particular food may affect them, and if they should avoid it.
 
 ## Features
 - Helps a user know if a food could cause a blood glucose spike
-- Uses SQLite to store data locally
+- SQLite to store data locally
 - OpenAI for image identification
 - Python for easier data visualization
-
+- Data visualization to display how foods may spike BGL
+- Track BGL deltas for each food item or meal
 
 ## Usage
+1. **Start the program** and select a user_id.
+2. **Capture or upload a photo** of a meal using the file dialog, file_location, or with manual input.
+3. **Input BGL data** with spreadsheet data of BGL and time.
+4. The app will:
+   - Identify foods in the image using OpenAI vision tools (optional)
+   - Store the meal and BGL delta in a local SQLite database
+   - Associate individual foods with BGL changes
+5. Use built-in visualizations to analyze which foods may consistently correlate with high BGL spikes.
 
 
 ## Data Structure
