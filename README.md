@@ -14,17 +14,25 @@ This project allows a user to take a picture of their food and associate those f
 
 ## Data Structure
 
+**Database schema includes:**
+- `users`: user_id, name
+- `food`: food_id, name, carbs, protein, fat
+- `meal_consumed`: meal_id, user_id, bgl_delta, date, time_of_day
+- `meal_items`: meal_id, food_id, portion
 
 ## Requirements
--Python 3.7+
--matplotlib
--numpy
--pandas
+- Python 3.7+
+- `matplotlib`
+- `numpy`
+- `pandas`
 
 ## Future Prospects
 - Creating downloadable app for the store (main goal afterwards)
-- Cloud storage for database instead of SQLite for local
+- Replace SQLite with a cloud-based storage
 - Implementing a GUI for program (if there's no app)
 
-## Copright
+## Author
+- Zachary McKinney
+- Github: https://github.com/ZacharyMcKinney
+- Email me at zachary.mckinney04@gmail.com
 

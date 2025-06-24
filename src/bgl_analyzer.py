@@ -1,6 +1,9 @@
 ## Copyright 2025, Zachary McKinney
 
 import sqlite3
+import tkinter as tk
+from tkinter import filedialog
+
 
 # Note to Self: Implement crud? create, retrieve, update, delete functions
 class BGL_Analyzer:
@@ -72,13 +75,36 @@ class BGL_Analyzer:
                                FOREIGN KEY (food_id) REFERENCES food(food_id))
                            """)
     
-    #select the file location for food
-    def get_foods(self):
-        pass
+    def get_picture(self):
+        """
+        Prompts the user to select a photo of their food
 
-    #manually input foods which is a set    
-    def get_foods(self, foods):
+        Returns:
+            jpg, jpeg, png, bmp, webp: Picture file that's selected
+        """
+        root = tk.Tk()
+        root.withdraw()
+        picture = filedialog.askopenfilename(
+            title="Select a food photo",
+            filetypes=[("Image Files", "*.jpg *.jpeg *.png *.bmp *webp")]
+        )
+        return picture
+    
+    #mainly for testing, but file location
+    def get_picture(self, file_location):
+        """_summary_
+
+        Args:
+            file_location (string): Path to any of the acceptable image file types
+        """
+        # if not os.path.exist(file_location):
+        #     raise FileNotFoundError("Location {file_location} was not found")
         pass
+    
+    #manually input foods which is a set    
+    def add_foods(self, foods):
+        for food in foods:
+            self._db_add_food(food)
     
     #mainly for testing, but file location
     def get_foods(self, file_location):
@@ -98,19 +124,29 @@ class BGL_Analyzer:
             bgl_spike (int or double): Max bgl after food - avg bgl for the day
 
         Raises:
-            Exception: _description_
+            Exception: Needs at least one food to be added
         """
         if len(foods) <= 0:
             raise Exception("Set of foods can't be empty")
-        pass
+        
     
     #either use a library for this to do it automatically
     #or calculate manually?
     def calculate_correlation(self, food):
         pass
-    
+        
     #add a food to the database if it is not found
     def _db_add_food(self, food):
+        self.cursor.execute("""
+                            INSERT INTO food({food}, {carbs}, {protein}, {fat})
+                            VALUES
+                            """)
+        pass
+    
+    def add_meal_consumed(self, bgl_delta, date, time_of_day):
+        pass
+    
+    def link_food_to_meal(self, meal_id, food_id, portion=1):
         pass
     
     #display the blood glucose as y axis with the time as the x axis.
