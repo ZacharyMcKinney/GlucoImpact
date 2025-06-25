@@ -1,0 +1,13 @@
+User ID,Timestamp,Glucose Level (mg/dL),Notes,Meal,Exercise,Insulin (units)
+4,2025-06-10 06:00:00,113,Post-breakfast,,Yes,1
+4,2025-06-10 10:00:00,158,Post-breakfast,Sandwich,No,0
+4,2025-06-10 14:00:00,84,Fasting,Salad,Yes,3
+4,2025-06-10 18:00:00,101,,Pasta,Yes,3
+4,2025-06-11 06:00:00,104,Post-lunch,Oatmeal,Yes,3
+4,2025-06-11 10:00:00,89,Fasting,Banana,Yes,0
+4,2025-06-11 14:00:00,159,Fasting,Salad,No,1
+4,2025-06-11 18:00:00,116,Fasting,Oatmeal,Yes,2
+4,2025-06-12 06:00:00,157,Fasting,Oatmeal,No,3
+4,2025-06-12 10:00:00,104,Pre-dinner,Banana,Yes,0
+4,2025-06-12 14:00:00,92,Pre-dinner,Oatmeal,No,2
+4,2025-06-12 18:00:00,132,Post-breakfast,Pasta,No,3

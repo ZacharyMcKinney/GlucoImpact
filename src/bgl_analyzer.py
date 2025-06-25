@@ -1,8 +1,6 @@
 ## Copyright 2025, Zachary McKinney
 
-import tkinter as tk
 import db_manager as DB
-from tkinter import filedialog
 class BGL_Analyzer:
 
 

@@ -1,6 +1,6 @@
 # InsulinApp
 
-This project allows a user to take a picture of their food and associate those foods with an increase in BGL. 
+This project allows a user to take a picture of their food and associate those foods with an increase in Blood Glucose Levels (BGL). 
 Users can understand how a particular food may affect them, and if they should avoid it.
 
 ## Features

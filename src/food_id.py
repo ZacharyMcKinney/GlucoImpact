@@ -1,5 +1,8 @@
 ## Copyright 2025, Zachary McKinney
 
+import tkinter as tk
+from tkinter import filedialog
+
 class Food_ID:
     
     def get_picture(self):
