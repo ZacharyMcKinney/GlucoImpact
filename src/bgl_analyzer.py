@@ -14,17 +14,9 @@ class BGL_Analyzer:
             user (str): user_id to be used in the database
             db (str): filename to Sqlite database
         """
-        
-        ########
-        #rework this, no time right now
-        self.db_filename = database_name
+
+        self.db_manager = DB(database_name)
         self._user = user
-        self.connection = DB.sqlite3.connection(self.db_filename)
-        self.cursor = DB.connection.cursor()
-        self.cursor.execute("PRAGMA foreign_keys = ON;")
-        self._create_tables()
-        self.cursor.commit()
-        ########
     
     #mainly for testing, but file location
     def get_foods(self, file_location):
@@ -54,30 +46,3 @@ class BGL_Analyzer:
     #or calculate manually?
     def calculate_correlation(self, food):
         pass
-    
-    def add_meal_consumed(self, bgl_delta, date, time_of_day):
-        pass
-    
-    def link_food_to_meal(self, meal_id, food_id, portion=1):
-        pass
-    
-    #blood glucose for all time. For use if you can connect to
-    #a glucose monitoring app or device
-    def get_avg_alltime_BGL(self):
-        pass
-    
-    #Blood glucose level for the day
-    def get_avg_BGL(self):
-        pass
-    
-    #return the BGl for a food (only values, no dates) 
-    def _get_food_BGL_data(self, food):
-        pass
-    
-    #update the all time average. Maybe include the date in the database avgerage. Could possibly display trend of BGL over time
-    def _update_avg_BGL(self):
-        pass
-    
-    def print_database(self):
-        pass
-    
