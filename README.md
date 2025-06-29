@@ -35,6 +35,7 @@ Users can understand how a particular food may affect them, and if they should a
 - `matplotlib`
 - `numpy`
 - `pandas`
+- 'openai'
 
 ## Future Prospects
 - Creating downloadable app for the store (main goal afterwards)
