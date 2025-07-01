@@ -85,22 +85,6 @@ class DB_Manager:
         if not isinstance(food, Food_Item):
             raise TypeError("Food data must be of type Food_Item")
         self._db_add_food(food)
-          
-          
-    # This function is useless unless I do executemany. Currently still slow as add_food. No purpose      
-    # def add_foods(self, foods):
-    #     """_summary_
-
-    #     Args:
-    #         foods (_type_): _description_
-
-    #     Raises:
-    #         TypeError: _description_
-    #     """
-    #     for food in foods:
-    #         if not isinstance(food, Food_Item):
-    #             raise TypeError("Food data must be of type Food_Item")
-    #         self._db_add_food(food)
             
     def _db_add_food(self, food):
         self.cursor.execute("""
@@ -111,10 +95,24 @@ class DB_Manager:
         
 # --- Read Functions --- 
 
+def get_food(self, food_id: int):
+    pass
+
+def get_all_food(self):
+    pass
+
+def find_food(self, food: str):
+    pass
+
 # --- Update Functions ---
+
+def update_food(self, food):
+    pass
 
 # --- Delete Functions ---
 
+def delete_food(self, food_id:int):
+    
 # --- Utilities ---       
         
     def add_meal_consumed(self, bgl_delta, date, time_of_day):
