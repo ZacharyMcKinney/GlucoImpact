@@ -72,8 +72,11 @@ class DB_Manager:
                            """)
         
 # --- Add / Insert Functions ---
+
+    def add_user(self, user_id: int):
+        pass
         
-    def add_food(self, food):
+    def add_food(self, food: int):
         """_summary_
 
         Args:
@@ -93,26 +96,51 @@ class DB_Manager:
                             """, (food.food, food.carbs, food.protein, food.fat))
         self._db_connection.commit()   
         
+    def _add_meal_items(self):
+        pass
+    
+    def add_meal(self):
+        pass
+        
 # --- Read Functions --- 
 
-def get_food(self, food_id: int):
-    pass
+    # - FOOD -
+    def get_food_by_id(self, food_id: int):
+        pass
 
-def get_all_food(self):
-    pass
+    def get_all_food(self):
+        pass
 
-def find_food(self, food: str):
-    pass
+    def get_food_by_name(self, food: str):
+        pass
+
+    # - MEAL CONSUMED
+    def get_meal_by_id(self, meal_id: int):
+        pass
+
+    def get_meal_by_name(self, meal_name: str):
+        pass
+
+    def get_all_meals(self):
+        pass
+
 
 # --- Update Functions ---
 
-def update_food(self, food):
-    pass
+    def update_food(self, food_id):
+        pass
+
+    def update_meal(self, meal_id):
+        pass
 
 # --- Delete Functions ---
 
-def delete_food(self, food_id:int):
-    
+    def delete_food(self, food_id: int):
+        pass
+
+    def delete_meal(self, meal_id: int):
+        pass
+
 # --- Utilities ---       
         
     def add_meal_consumed(self, bgl_delta, date, time_of_day):
