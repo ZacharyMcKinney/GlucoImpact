@@ -1,10 +1,11 @@
 ## Copyright 2025, Zachary McKinney
 
 import db_manager as DB
+from datetime import date
 class BGL_Analyzer:
 
 
-    def __init__(self, user, database_name):
+    def __init__(self, user: str, database_name: str):
         """
         Initiate an Analyzer object with a dedicated user and uses the database
         associated with the user
@@ -19,21 +20,21 @@ class BGL_Analyzer:
         self._user = user
     
     #mainly for testing, but file location
-    def get_foods(self, file_location):
+    def get_foods(self, file_location: str):
         pass
     
-    def get_bgl_spike(self, time):
+    def get_bgl_spike(self, time: date):
         pass
     
     #use lambda to make it easier to read and complete
     #set={}
-    def add_foods(self, foods, bgl_spike):
+    def add_foods(self, foods, bgl_spike: float):
         """
         Enters in a bgl spike for set of foods given into the local database
         
         Args:
             foods (set of strings): Identified foods consumed at a bgl spike
-            bgl_spike (int or double): Max bgl after food - avg bgl for the day
+            bgl_spike (int or float): Max bgl after food - avg bgl for the day
 
         Raises:
             Exception: Needs at least one food to be added
@@ -44,5 +45,5 @@ class BGL_Analyzer:
     
     #either use a library for this to do it automatically
     #or calculate manually?
-    def calculate_correlation(self, food):
+    def calculate_correlation(self, food_id: int):
         pass
