@@ -1,6 +1,7 @@
 ## Copyright 2025, Zachary McKinney
 import sqlite3
 from food_item import Food_Item
+from datetime import date
 
 
 # Note to Self: Implement crud? create, retrieve, update, delete functions
@@ -12,7 +13,7 @@ class DB_Manager:
     
 # --- Class tools and Initiation ---
        
-    def __init__(self, database_name):
+    def __init__(self, database_name: str):
         """_summary_
 
         Args:
@@ -25,14 +26,14 @@ class DB_Manager:
         self.create_tables()
         self.cursor.commit()
     
-    def close_cursor(self):
+    def close_cursor(self) -> None:
         """
         Closes database cursor connection.
         __Init__ doesn't close it after intiating the cursor
         """
         self.cursor.close()
     
-    def create_tables(self):
+    def create_tables(self) -> None:
         """
         Creates tables if they don't exist int the database.
         Has four tables in the database.
@@ -73,10 +74,10 @@ class DB_Manager:
         
 # --- Add / Insert Functions ---
 
-    def add_user(self, user_id: int):
+    def add_user(self, user_id: int) -> None:
         pass
         
-    def add_food(self, food: int):
+    def add_food(self, food: int) -> None:
         """_summary_
 
         Args:
@@ -89,80 +90,80 @@ class DB_Manager:
             raise TypeError("Food data must be of type Food_Item")
         self._db_add_food(food)
             
-    def _db_add_food(self, food):
+    def _db_add_food(self, food: Food_Item) -> None:
         self.cursor.execute("""
                             INSERT INTO food({food}, {carbs}, {protein}, {fat})
                             VALUES (?, ?, ?, ?)
                             """, (food.food, food.carbs, food.protein, food.fat))
         self._db_connection.commit()   
         
-    def _add_meal_items(self):
+    def _add_meal_items(self) -> None:
         pass
     
-    def add_meal(self):
+    def add_meal(self) -> None:
         pass
+    
+    def add_meal_consumed(self, bgl_delta: int, time: date) -> None:
+        pass
+    
         
 # --- Read Functions --- 
 
     # - FOOD -
-    def get_food_by_id(self, food_id: int):
+    def get_food_by_id(self, food_id: int) -> Food_Item:
         pass
 
-    def get_all_food(self):
+    def get_all_food(self) -> tuple[Food_Item]:
         pass
 
-    def get_food_by_name(self, food: str):
+    def get_food_by_name(self, food: str) -> Food_Item:
         pass
 
     # - MEAL CONSUMED
-    def get_meal_by_id(self, meal_id: int):
+    def get_meal_by_id(self, meal_id: int) -> Meal:
         pass
 
-    def get_meal_by_name(self, meal_name: str):
+    def get_meal_by_name(self, meal_name: str) -> Meal:
         pass
 
-    def get_all_meals(self):
+    def get_all_meals(self) -> tuple[Meal]:
         pass
 
+
+
+    #return the BGl for a food (only values, no dates) 
+    def _get_food_BGL_data(self, food_id: int) -> float:
+        pass
+
+    #blood glucose for all time. For use if you can connect to
+    #a glucose monitoring app or device
+    def get_avg_alltime_BGL(self) -> float:
+        pass
+    
+    #Blood glucose level for the day
+    def get_avg_BGL(self) -> float:
+        pass
 
 # --- Update Functions ---
 
-    def update_food(self, food_id):
+    def update_food(self, food_id: int) -> None:
         pass
 
-    def update_meal(self, meal_id):
+    def update_meal(self, meal_id: int) -> None:
         pass
 
 # --- Delete Functions ---
 
-    def delete_food(self, food_id: int):
+    def delete_food(self, food_id: int) -> Food_Item:
         pass
 
-    def delete_meal(self, meal_id: int):
+    def delete_meal(self, meal_id: int) -> Meal:
         pass
 
 # --- Utilities ---       
         
-    def add_meal_consumed(self, bgl_delta, date, time_of_day):
+    def link_food_to_meal(self, meal_id: int, food_id: int, portion: float = 1) -> None:
         pass
     
-    def link_food_to_meal(self, meal_id, food_id, portion=1):
-        pass
-    
-    #blood glucose for all time. For use if you can connect to
-    #a glucose monitoring app or device
-    def get_avg_alltime_BGL(self):
-        pass
-    
-    #Blood glucose level for the day
-    def get_avg_BGL(self):
-        pass
-    
-    #return the BGl for a food (only values, no dates) 
-    def _get_food_BGL_data(self, food):
-        pass
-    
-    #update the all time average. Maybe include the date in the database avgerage. Could possibly display trend of BGL over time
-    def _update_avg_BGL(self):
-        pass
+
     
