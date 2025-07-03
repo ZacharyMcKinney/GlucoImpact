@@ -1,6 +1,7 @@
 ## Copyright 2025, Zachary McKinney
 
 import db_manager as DB
+import pandas as pd
 from datetime import date
 class BGL_Analyzer:
 
@@ -18,17 +19,12 @@ class BGL_Analyzer:
 
         self.db_manager = DB(database_name)
         self._user = user
-    
-    #mainly for testing, but file location
-    def get_foods(self, file_location: str):
-        pass
-    
-    def get_bgl_spike(self, time: date):
-        pass
-    
+
+# --- Database Related ---   
+
     #use lambda to make it easier to read and complete
     #set={}
-    def add_foods(self, foods, bgl_spike: float):
+    def add_food_bgl(self, foods, bgl_spike: float):
         """
         Enters in a bgl spike for set of foods given into the local database
         
@@ -42,8 +38,11 @@ class BGL_Analyzer:
         if len(foods) <= 0:
             raise Exception("Set of foods can't be empty")
         
-    
-    #either use a library for this to do it automatically
-    #or calculate manually?
+# --- Calculations ---
+        
+    # def calculate_correlation(self, food_id: int, data) -> Type:
     def calculate_correlation(self, food_id: int):
+        df = pd.DataFrame()
+        X = df[]
+        Y = df[]
         pass
