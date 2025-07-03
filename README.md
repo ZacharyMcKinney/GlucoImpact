@@ -31,7 +31,7 @@ Users can understand how a particular food may affect them, and if they should a
 - `meal_items`: meal_id, food_id, portion
 
 ## Requirements
-- Python 3.7+
+- Python 3.10+
 - `matplotlib`
 - `numpy`
 - `pandas`
