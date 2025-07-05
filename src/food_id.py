@@ -2,8 +2,19 @@
 
 import tkinter as tk
 from tkinter import filedialog
+import os
+import openai
+from dotenv import load_dotenv
 
 class Food_ID:
+    
+    def __init__(self):
+        load_dotenv()
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+        # if not api_key:
+        #     raise ValueError("OPENAI_API_KEY is not set in environment variables")
+    
+# --- GET PICTURE ---
     
     def get_picture(self):
         """
@@ -22,7 +33,7 @@ class Food_ID:
 
 
     #mainly for testing, but file location
-    def get_picture(self, file_location):
+    def get_picture(self, file_location: str):
         """_summary_
 
         Args:
@@ -32,7 +43,30 @@ class Food_ID:
         #     raise FileNotFoundError("Location {file_location} was not found")
         pass
     
-    #logmeal api?
-    #openai api?
+# --- OPENAI IDENTIFICATION ---    
+
     def _identify_food(picture):
-        pass
+        # system_command = ""
+        # assistant_command = ""
+        request = """
+            Identify the foods in this picture. If this is a typical meal food,
+            put the common meal name
+            """
+        chat_completion = openai.ChatCompletions.create(
+            model="gpt-4o",
+            messages=[
+                    # {"role": "system", "content": system_command},
+                    # {"role": "assistant", "content": assistant_command},
+                    {"role": "user", "content": [
+                        {"type": "text", "text": request},
+                        {
+                            "type": "image_url", 
+                            "image_url": {"url": picture}
+                        }
+                    ]}
+            ],
+            max_tokens = 300,
+            temperature = 0
+        )
+
+        return chat_completion.choices[0].message.content
