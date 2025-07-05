@@ -31,11 +31,12 @@ Users can understand how a particular food may affect them, and if they should a
 - `meal_items`: meal_id, food_id, portion
 
 ## Requirements
-- Python 3.10+
-- `matplotlib`
+- `Python 3.10+`
 - `numpy`
 - `pandas`
 - `openai`
+- `matplotlib`
+- `python-dotenv`
 
 ## Future Prospects
 - Creating downloadable app for the store (main goal afterwards)
