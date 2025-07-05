@@ -7,3 +7,6 @@ matplotlib
 
 # API
 openai
+
+# Utilities
+python-dotenv
