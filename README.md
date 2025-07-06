@@ -37,6 +37,7 @@ Users can understand how a particular food may affect them, and if they should a
 - `openai`
 - `matplotlib`
 - `python-dotenv`
+- `pillow`
 
 ## Future Prospects
 - Creating downloadable app for the store (main goal afterwards)
