@@ -1,7 +1,7 @@
 ## Copyright 2025, Zachary McKinney
 
 import tkinter as tk
-from tkinter import filedialog
+# from tkinter import filedialog
 from dotenv import load_dotenv
 from PIL import Image
 import os
@@ -11,6 +11,7 @@ from io import BytesIO
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 _IMG_FORMATS = {"jpeg", "jpg", "png", "webp"}
+_OPENAI_PROMPT_FILE = "./prompts/openai_prompt1.txt"
 
 
 # TODO: Add in exception for incorret api key
@@ -29,7 +30,7 @@ def get_img_location() -> str:
     """
     root = tk.Tk()
     root.withdraw()
-    img_location = filedialog.askopenfilename(
+    img_location = tk.filedialog.askopenfilename(
         title="Select a food photo",
         filetypes=[("Image Files", "*.jpg *.jpeg *.png *.bmp *webp")]
     )
@@ -115,52 +116,8 @@ def identify_food(file_location: str):
     if not is_supported(img):
         img = convert_img(img)
     b64_str = convert_pil_to_base64(img)
-    request = """
-        You are identifying foods present in an image for blood glucose tracking.
-
-        Only include foods and drinks visually present. Do not infer extras.
-
-        If multiple distinct meals or food groups appear, list each meal separately.
-
-        The first output section:
-        - First line is labeled "meals"
-        - Each line corresponds to one meal.
-        - Each line contains the common meal name followed by food items in that meal, all comma-separated.
-
-        For example:
-        meals
-        Eggs and Toast, Scrambled Eggs, Toast
-        Orange Juice, Orange Juice
-
-        After listing all the meals, make one line that says "food_items"
-        After that, list macronutrients per food item (carbs, protein, fats) as floats in grams, one food per line.
-        
-        For example:
-        food_items
-        Scrambled Eggs, 1.0, 12.0, 10.0
-        Toast, 15.0, 3.0, 1.0
-        Orange Juice, 25.0, 2.0, 0.0
-
-        Avoid listing individual ingredients like sugar, or pepper, unless served separately.
-        Include it in the meal and as an ingredient if it will have a major effect on the food.
-        For example, include frosting in a frosted donut and as an ingredient. However, don't include it
-        in a cake. Instead if a cake, which almost always has frosting, is plain, say that it is a plain cake.
-        The main difference is that a donut is usually customized, while a cake is less customized.
-        Therefore, the donut will have more variation (from frosting, custard, etc) in how it'll affect someone's blood glucose levels or diet.
-        
-
-        If nothing recognizable is present, output:
-        None
-        
-        Completed Example:
-        meals
-        Eggs and Toast, Scrambled Eggs, Toast
-        Orange Juice, Orange Juice
-        food_items
-        Scrambled Eggs, 1.0, 12.0, 10.0
-        Toast, 15.0, 3.0, 1.0
-        Orange Juice, 25.0, 2.0, 0.0
-    """
+    with open(_OPENAI_PROMPT_FILE, 'r') as prompt:
+        request = prompt.read()
     chat_completion = openai.ChatCompletions.create(
         model="gpt-4o",
         messages=[
