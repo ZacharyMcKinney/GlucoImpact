@@ -127,10 +127,10 @@ def identify_food(file_location: str):
     chat_completion = openai.ChatCompletions.create(
         model="gpt-4o",
         messages=[
-                {"role": "system", "content": openai_prompts["system"]},
-                {"role": "assistant", "content": openai_prompts["assistant"]},
+                {"role": "system", "content": openai_prompts.system},
+                {"role": "assistant", "content": openai_prompts.assistant},
                 {"role": "user", "content": [
-                    {"type": "text", "text": openai_prompts["user"]},
+                    {"type": "text", "text": openai_prompts.user},
                     {
                         "type": "image_url", 
                         "image_url": {"url": b64_str}
