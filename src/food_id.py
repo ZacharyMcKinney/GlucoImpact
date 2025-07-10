@@ -1,25 +1,30 @@
 ## Copyright 2025, Zachary McKinney
 
-import tkinter as tk
-# from tkinter import filedialog
-from dotenv import load_dotenv
-from PIL import Image
 import os
-import openai
 import base64
 from io import BytesIO
+from collections import namedtuple
+
+from dotenv import load_dotenv
+from PIL import Image
+import openai
+import tkinter as tk
+# from tkinter import filedialog
+
+# --- SETUP ---
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# --- Constant and Defintions ---
 _IMG_FORMATS = {"jpeg", "jpg", "png", "webp"}
-_OPENAI_PROMPT_FILE = "./prompts/openai_prompt1.txt"
+OpenAI_Prompts = namedtuple('Prompts', ['system', 'assistant', 'user'])
 
-
+# --- TODO list ---
 # TODO: Add in exception for incorret api key
 # TODO: Add my API key into my environment variables
-# TODO: Move openai request into another text file where it's loaded in
+# TODO: Finish documentation for every function
 
-
-# --- GET PICTURE ---
+# --- GET IMAGE ---
     
 def get_img_location() -> str:
     """
@@ -46,6 +51,8 @@ def get_img(file_location: str) -> Image:
     # if not os.path.exist(file_location):
     #     raise FileNotFoundError("Location {file_location} was not found")
     # return convert_picture(picture)
+
+# --- IMAGE UTILITIES --- 
 
 def is_supported(img: Image) -> bool:
     """
@@ -116,15 +123,14 @@ def identify_food(file_location: str):
     if not is_supported(img):
         img = convert_img(img)
     b64_str = convert_pil_to_base64(img)
-    with open(_OPENAI_PROMPT_FILE, 'r') as prompt:
-        request = prompt.read()
+    openai_prompts: namedtuple = _load_openai_prompts()
     chat_completion = openai.ChatCompletions.create(
         model="gpt-4o",
         messages=[
-                # {"role": "system", "content": system_command},
-                # {"role": "assistant", "content": assistant_command},
+                {"role": "system", "content": openai_prompts["system"]},
+                {"role": "assistant", "content": openai_prompts["assistant"]},
                 {"role": "user", "content": [
-                    {"type": "text", "text": request},
+                    {"type": "text", "text": openai_prompts["user"]},
                     {
                         "type": "image_url", 
                         "image_url": {"url": b64_str}
@@ -135,3 +141,24 @@ def identify_food(file_location: str):
         temperature = 0
     )
     return chat_completion.choices[0].message.content
+        
+def _load_openai_prompts(
+    system_path: str = "./prompts/openai_system1.txt",
+    assistant_path: str = "./prompts/openai_assistant1.txt",
+    user_path: str = "./prompts/openai_user1.txt" 
+) -> namedtuple:
+    """_summary_
+
+    Args:
+        system_path (str, optional): _description_. Defaults to "./prompts/openai_system1.txt".
+        assistant_path (str, optional): _description_. Defaults to "./prompts/openai_assistant1.txt".
+        user_path (str, optional): _description_. Defaults to "./prompts/openai_user1.txt".
+
+    Returns:
+        namedtuple: _description_
+    """
+    def _read_file(path: str) -> str:
+        with open(path, 'r') as prompt:
+            return prompt.read()
+        
+    return OpenAI_Prompts(_read_file(system_path), _read_file(assistant_path), _read_file(user_path))
