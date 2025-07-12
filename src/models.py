@@ -9,3 +9,14 @@ class Food_Item:
     protein: float
     fat: float
     
+@dataclass
+class Meal:
+    meal_id: int
+    user_id: int
+    food_items: list
+    
+@dataclass
+class User:
+    user_id: int
+    name: str
+    
