@@ -1,0 +1,1 @@
+Identify the foods in this picture for blood glucose tracking. Be specific in the foods and meal names.

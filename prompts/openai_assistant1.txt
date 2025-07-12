@@ -1,0 +1,7 @@
+meals
+Eggs and Toast, Scrambled Eggs, Toast
+Orange Juice, Orange Juice
+food_items
+Scrambled Eggs, 1.0, 12.0, 10.0
+Toast, 15.0, 3.0, 1.0
+Orange Juice, 25.0, 2.0, 0.0
