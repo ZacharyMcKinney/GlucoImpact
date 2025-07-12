@@ -1,4 +1,4 @@
-# InsulinApp
+# GlucoImpact
 
 This project allows a user to take a picture of their food and associate those foods with an increase in Blood Glucose Levels (BGL). 
 Users can understand how a particular food may affect them, and if they should avoid it.
@@ -32,12 +32,13 @@ Users can understand how a particular food may affect them, and if they should a
 
 ## Requirements
 - `Python 3.10+`
-- `numpy`
-- `pandas`
-- `openai`
 - `matplotlib`
-- `python-dotenv`
+- `numpy`
+- `openai`
+- `pandas`
 - `pillow`
+- `PyQt6`
+- `python-dotenv`
 
 ## Future Prospects
 - Creating downloadable app for the store (main goal afterwards)
