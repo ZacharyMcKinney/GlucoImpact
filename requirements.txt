@@ -2,6 +2,9 @@
 numpy
 pandas
 
+# GUI
+PyQt6
+
 # Visualization
 matplotlib
 
