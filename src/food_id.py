@@ -9,20 +9,16 @@ from dotenv import load_dotenv
 from PIL import Image
 import openai
 import tkinter as tk
-# from tkinter import filedialog
 
 # --- SETUP ---
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
+if not openai.api_key:
+    raise openai.APIConnectionError("Was not able to load OpenAI API key. Value is None or blank")
 
 # --- Constant and Defintions ---
 _IMG_FORMATS = {"jpeg", "jpg", "png", "webp"}
 OpenAI_Prompts = namedtuple('Prompts', ['system', 'assistant', 'user'])
-
-# --- TODO list ---
-# TODO: Add in exception for incorret api key
-# TODO: Add my API key into my environment variables
-# TODO: Finish documentation for every function
 
 # --- GET IMAGE ---
     
@@ -42,23 +38,35 @@ def get_img_location() -> str:
     return img_location
 
 def get_img(file_location: str) -> Image:
-    """_summary_
-
+    """
+    Returns a Pillow Image if it's found and able to be loaded in
+    
     Args:
         file_location (string): Path to any of the acceptable image file types
+        
+    Raises:
+        FileNotFoundError: File doesn't exist
+        UnidentifiedImageError: Image format isn't able to be loaded by Pillow
+        
+    Returns:
+        Image: A Pillow Image from the file_location
     """
-    return Image.open(file_location)
-    # if not os.path.exist(file_location):
-    #     raise FileNotFoundError("Location {file_location} was not found")
-    # return convert_picture(picture)
+    try:
+        return Image.open(file_location)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"The file location {file_location} was not able to be opened")
+    except Image.UnidentifiedImageError:
+        raise Image.UnidentifiedImageError(f"File in {file_location} isn't a supported type: {os.path.splittext(file_location)[1]}")
 
 # --- IMAGE UTILITIES --- 
 
 def is_supported(img: Image) -> bool:
     """
     Returns whether an image is supported
+    
     Args:
         picture (Image): Image loaded by pillow
+        
     Returns:
         bool: Whether or not image is a jpeg, jpg, png, or webp
     """
@@ -107,17 +115,17 @@ def convert_pil_to_base64(img: Image) -> str:
 
 # --- OPENAI IDENTIFICATION ---    
 
-def identify_food(file_location: str):
+def identify_food(file_location: str) -> str:
     """
     Takes a file_location gets an img and verifies that it is in acceptable format.
     Then the img is sent the OpenAI API. It returns the meal including the foods
     and macro nutrients in the foods.
 
-    Args:
+    Args:a
         file_location (str): Takes a file_location string that is read into a Pillow Image
 
     Returns:
-        str: _description_
+        str: Text formatted with meals and food_items. Formatted like in the assistant files.
     """
     img = get_img(file_location)
     if not is_supported(img):
@@ -147,16 +155,20 @@ def _load_openai_prompts(
     assistant_path: str = "./prompts/openai_assistant1.txt",
     user_path: str = "./prompts/openai_user1.txt" 
 ) -> namedtuple:
-    """_summary_
+    """
+    Takes three files locations for system, assistant, and user paths.
+    The files are read and returned as a named tuple with each variable.
+    Private function _read_file for reading each file
 
     Args:
-        system_path (str, optional): _description_. Defaults to "./prompts/openai_system1.txt".
-        assistant_path (str, optional): _description_. Defaults to "./prompts/openai_assistant1.txt".
-        user_path (str, optional): _description_. Defaults to "./prompts/openai_user1.txt".
+        system_path (str, optional): Text file to system prompt. Defaults to "./prompts/openai_system1.txt".
+        assistant_path (str, optional): Text file to assistant prompt. Defaults to "./prompts/openai_assistant1.txt".
+        user_path (str, optional): Text file to user prompt. Defaults to "./prompts/openai_user1.txt".
 
     Returns:
-        namedtuple: _description_
+        namedtuple: Tuple named Prompts with system, assistant, and user values.
     """
+    
     def _read_file(path: str) -> str:
         with open(path, 'r') as prompt:
             return prompt.read()
