@@ -27,7 +27,7 @@ def get_img_location() -> str:
     Prompts the user to select a photo of their food
 
     Returns:
-        jpg, jpeg, png, bmp, webp: Picture file that's selected
+        str: Picture file location that's selected
     """
     root = tk.Tk()
     root.withdraw()
