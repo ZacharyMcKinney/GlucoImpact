@@ -121,7 +121,7 @@ def identify_food(file_location: str) -> str:
     Then the img is sent the OpenAI API. It returns the meal including the foods
     and macro nutrients in the foods.
 
-    Args:a
+    Args:
         file_location (str): Takes a file_location string that is read into a Pillow Image
 
     Returns:
