@@ -28,10 +28,12 @@ class TestFoodID(unittest.TestCase):
         self.assertEqual(expected_hash, result_hash)
     
     def test_get_img_not_found(self):
-        pass
+        with self.assertRaises(FileNotFoundError):
+            fid.get_img("fake_path")
 
     def test_get_img_unidentified(self):
-        pass
+        with self.assertRaises(Image.UnidentifiedImageError):
+            fid.get_img("./requirements.txt")
     
     def test_is_supported(self):
         pass
