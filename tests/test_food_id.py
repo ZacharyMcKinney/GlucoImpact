@@ -9,15 +9,16 @@ from PIL import Image
 class TestFoodID(unittest.TestCase):
 
     def setUp(self):
-        img1_str = "./images/single_foods/apple.jpg"
-        img1 = Image.open(img1_str)
-        img2 = Image.open("./images/single_foods/bagels.jpg")
-        img3 = Image.open("./images/single_foods/yogurt.jpg")
-        img4 = Image.open("./images/single_foods/mashed_potatoes.jpg")
-        img5 = Image.open("./images/multiple_foods/bibimbap.jpg")
-        img6 = Image.open("./images/multiple_foods/salmon_dinner.jpg")
-        img7 = Image.open("./images/multiple_foods/yogurt_parfait.jpg")
-        img9 = Image.open("./images/multiple_foods/turkey_sandwich.jpg")
+        img1 = "./images/single_foods/apple.jpg"
+        img2 = "./images/single_foods/bagels.jpg"
+        img3 = "./images/single_foods/yogurt.jpg"
+        img4 = "./images/single_foods/mashed_potatoes.jpg"
+        img5 = "./images/multiple_foods/bibimbap.jpg"
+        img6 = "./images/multiple_foods/salmon_dinner.jpg"
+        img7 = "./images/multiple_foods/yogurt_parfait.jpg"
+        img9 = "./images/multiple_foods/turkey_sandwich.jpg"
+        # false_path = "./images/multiple_foods/fake.jg"
+        unsupported_path = "/test_assets/gif_image.gif"
 
     # def test_get_img_location(self):
     #     pass
@@ -35,8 +36,13 @@ class TestFoodID(unittest.TestCase):
         with self.assertRaises(Image.UnidentifiedImageError):
             fid.get_img("./requirements.txt")
     
-    def test_is_supported(self):
-        pass
+    def test_is_supported_true(self):
+        self.assertEqual(True, fid.is_supported(self.img1))
+        self.assertEqual(True, fid.is_supported(self.img2))
+        self.assertEqual(True, fid.is_supported(self.img3))
+    
+    def test_is_supported_false(self):
+        self.assertEqual(False, fid.is_supported(fid.get_img(self.unsupported_path)))
     
     def test_convert_img(self):
         pass
