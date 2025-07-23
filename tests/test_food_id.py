@@ -45,10 +45,24 @@ class TestFoodID(unittest.TestCase):
         self.assertEqual(False, fid.is_supported(fid.get_img(self.unsupported_path)))
     
     def test_convert_img(self):
-        pass
+        self.assertEqual("PNG", fid.convert_img(fid.get_img(self.img1)).format)
+        self.assertEqual("JPG", fid.convert_img(fid.get_img(self.img1), "JPG").format)
+        self.assertEqual("JPEG", fid.convert_img(fid.get_img(self.img1), "JPEG").format)
+        self.assertEqual("WEBP", fid.convert_img(fid.get_img(self.img1), "WEBP").format)
     
     def test_convert_pil_to_base64(self):
-        pass
+        self.assertEqual(
+            self.get_text("./test_assets/apple_b64.txt"),
+            fid.convert_pil_to_base64(fid.get_img("./images/single_foods/apple.jpg"))
+                         )
+        self.assertEqual(
+            self.get_text("./test_assets/egg_toast_b64.txt"),
+            fid.convert_pil_to_base64(fid.get_img("./images/single_foods/apple.jpg"))
+                         )
+        self.assertEqual(
+            self.get_text("./test_assets/rice_b64.txt"),
+            fid.convert_pil_to_base64(fid.get_img("./images/single_foods/rice.jpg"))
+                         )
 
     def test_identify_food(self):
         pass
@@ -56,11 +70,16 @@ class TestFoodID(unittest.TestCase):
     def test_identify_foods_data(self):
         pass
 
-    def test_load_openai_prompts(self) :
-        pass
+    # def test_load_openai_prompts(self) :
+    #     pass
 
     def image_hash(img: Image.Image):
         return hashlib.md5(img.tobytes()).hexdigest()
+    
+    def get_text(file_loc: str):
+        with open(file_loc, 'r') as file:
+            text = file.read()
+        return text
 
 if __name__ == "__main__":
     unittest.main()
