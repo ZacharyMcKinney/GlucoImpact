@@ -9,16 +9,16 @@ from PIL import Image
 class TestFoodID(unittest.TestCase):
 
     def setUp(self):
-        img1 = "./images/single_foods/apple.jpg"
-        img2 = "./images/single_foods/bagels.jpg"
-        img3 = "./images/single_foods/yogurt.jpg"
-        img4 = "./images/single_foods/mashed_potatoes.jpg"
-        img5 = "./images/multiple_foods/bibimbap.jpg"
-        img6 = "./images/multiple_foods/salmon_dinner.jpg"
-        img7 = "./images/multiple_foods/yogurt_parfait.jpg"
-        img9 = "./images/multiple_foods/turkey_sandwich.jpg"
+        self.img1 = "./images/single_foods/apple.jpg"
+        self.img2 = "./images/single_foods/bagels.jpg"
+        self.img3 = "./images/single_foods/yogurt.jpg"
+        self.img4 = "./images/single_foods/mashed_potatoes.jpg"
+        self.img5 = "./images/multiple_foods/bibimbap.jpg"
+        self.img6 = "./images/multiple_foods/salmon_dinner.jpg"
+        self.img7 = "./images/multiple_foods/yogurt_parfait.jpg"
+        self.img9 = "./images/multiple_foods/turkey_sandwich.jpg"
         # false_path = "./images/multiple_foods/fake.jg"
-        unsupported_path = "/test_assets/gif_image.gif"
+        self.unsupported_path = "/test_assets/gif_image.gif"
 
     # def test_get_img_location(self):
     #     pass
