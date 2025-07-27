@@ -24,8 +24,8 @@ class TestFoodID(unittest.TestCase):
     #     pass
     
     def test_get_img_pass(self):
-        expected_hash = self.image_hash(self.img1)
-        result_hash = fid.get_img(self.img1_str)
+        expected_hash = self.image_hash(Image.open(self.img1))
+        result_hash = self.image_hash(fid.get_img(self.img1))
         self.assertEqual(expected_hash, result_hash)
     
     def test_get_img_not_found(self):
@@ -52,7 +52,7 @@ class TestFoodID(unittest.TestCase):
     
     def test_convert_pil_to_base64(self):
         self.assertEqual(
-            self.get_text("./test_assets/apple_b64.txt"),
+            self.get_text("/test_assets/apple_b64.txt"),
             fid.convert_pil_to_base64(fid.get_img("./images/single_foods/apple.jpg"))
                          )
         self.assertEqual(
@@ -73,6 +73,7 @@ class TestFoodID(unittest.TestCase):
     # def test_load_openai_prompts(self) :
     #     pass
 
+    @staticmethod
     def image_hash(img: Image.Image):
         return hashlib.md5(img.tobytes()).hexdigest()
     
