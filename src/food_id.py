@@ -88,7 +88,7 @@ def convert_img(img: Image, format: str = "PNG") -> Image:
         Image: Returns a new Pillow Image of the type format
     """
     if format not in _IMG_FORMATS or format is "JPG":
-        raise TypeError(f"Convert convert given Image to {format}. Supported formats are: {_CONVERSION_FORMATS}")
+        raise TypeError(f"Can't convert given Image to {format}. Supported formats are: {_CONVERSION_FORMATS}")
     buffer = BytesIO()
     img.save(buffer, format=format)
     buffer.seek(0)
