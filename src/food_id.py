@@ -18,6 +18,7 @@ if not openai.api_key:
 
 # --- Constant and Defintions ---
 _IMG_FORMATS = {"jpeg", "jpg", "png", "webp"}
+_CONVERSION_FORMATS = {"PNG", "JPEG", "WEBP"}
 OpenAI_Prompts = namedtuple('Prompts', ['system', 'assistant', 'user'])
 
 # --- GET IMAGE ---
@@ -56,7 +57,7 @@ def get_img(file_location: str) -> Image:
     except FileNotFoundError:
         raise FileNotFoundError(f"The file location {file_location} was not able to be opened")
     except Image.UnidentifiedImageError:
-        raise Image.UnidentifiedImageError(f"File in {file_location} isn't a supported type: {os.path.splittext(file_location)[1]}")
+        raise Image.UnidentifiedImageError(f"File in {file_location} isn't a supported type: {os.path.splitext(file_location)[1]}")
 
 # --- IMAGE UTILITIES --- 
 
@@ -80,9 +81,14 @@ def convert_img(img: Image, format: str = "PNG") -> Image:
         img (Image): Image to be copied and converted to format
         format (str, optional): New Image format. Defaults to "png".
 
+    Raises:
+        TypeError: If the format is not in the supported conversion formats
+
     Returns:
         Image: Returns a new Pillow Image of the type format
     """
+    if format not in _IMG_FORMATS or format is "JPG":
+        raise TypeError(f"Convert convert given Image to {format}. Supported formats are: {_CONVERSION_FORMATS}")
     buffer = BytesIO()
     img.save(buffer, format=format)
     buffer.seek(0)
