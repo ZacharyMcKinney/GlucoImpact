@@ -5,6 +5,8 @@ from PIL import Image
 
 # --- TODO LIST ---
 # Test a "None" picture that is unidentifiable 
+# Test OpenAI output for correct formatting
+# Test OpenAI indentifcation of images
 
 class TestFoodID(unittest.TestCase):
 
@@ -18,7 +20,7 @@ class TestFoodID(unittest.TestCase):
         self.img7 = "./images/multiple_foods/yogurt_parfait.jpg"
         self.img9 = "./images/multiple_foods/turkey_sandwich.jpg"
         # false_path = "./images/multiple_foods/fake.jg"
-        self.unsupported_path = "/test_assets/gif_image.gif"
+        self.unsupported_path = "./tests/test_assets/gif_image.gif"
 
     # def test_get_img_location(self):
     #     pass
@@ -46,7 +48,6 @@ class TestFoodID(unittest.TestCase):
     
     def test_convert_img(self):
         self.assertEqual("PNG", fid.convert_img(fid.get_img(self.img1)).format)
-        self.assertEqual("JPG", fid.convert_img(fid.get_img(self.img1), "JPG").format)
         self.assertEqual("JPEG", fid.convert_img(fid.get_img(self.img1), "JPEG").format)
         self.assertEqual("WEBP", fid.convert_img(fid.get_img(self.img1), "WEBP").format)
     
