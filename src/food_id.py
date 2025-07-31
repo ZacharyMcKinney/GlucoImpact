@@ -10,15 +10,23 @@ from PIL import Image
 import openai
 import tkinter as tk
 
+import logging
+log = logging.getLogger("food_id")
+
+# -- TODO --
+# quickly add support for other formats
+# add logs
+
 # --- SETUP ---
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 if not openai.api_key:
     raise openai.APIConnectionError("Was not able to load OpenAI API key. Value is None or blank")
+log.info("OpenAI key loaded successfully")
 
 # --- Constant and Defintions ---
 _IMG_FORMATS = {"jpeg", "jpg", "png", "webp"}
-_CONVERSION_FORMATS = {"PNG", "JPEG", "WEBP"}
+_CONVERSION_FORMATS = {"PNG", "JPEG", "WEBP", "BMP", "GIF", "TIFF"}
 OpenAI_Prompts = namedtuple('Prompts', ['system', 'assistant', 'user'])
 
 # --- GET IMAGE ---
@@ -32,10 +40,12 @@ def get_img_location() -> str:
     """
     root = tk.Tk()
     root.withdraw()
+    log.info("Prompting user to select an image")
     img_location = tk.filedialog.askopenfilename(
         title="Select a food photo",
         filetypes=[("Image Files", "*.jpg *.jpeg *.png *.bmp *webp")]
     )
+    log.info(f"User selected file: {img_location}")
     return img_location
 
 def get_img(file_location: str) -> Image:
@@ -87,7 +97,7 @@ def convert_img(img: Image, format: str = "PNG") -> Image:
     Returns:
         Image: Returns a new Pillow Image of the type format
     """
-    if format not in _IMG_FORMATS or format is "JPG":
+    if format not in _CONVERSION_FORMATS :
         raise TypeError(f"Can't convert given Image to {format}. Supported formats are: {_CONVERSION_FORMATS}")
     buffer = BytesIO()
     img.save(buffer, format=format)
