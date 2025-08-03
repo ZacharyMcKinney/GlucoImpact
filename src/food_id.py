@@ -81,7 +81,7 @@ def is_supported(img: Image) -> bool:
     Returns:
         bool: Whether or not image is a jpeg, jpg, png, or webp
     """
-    return img.format not in _IMG_FORMATS
+    return img.format.lower() in _IMG_FORMATS
 
 def convert_img(img: Image, format: str = "PNG") -> Image:
     """
@@ -120,7 +120,7 @@ def convert_pil_to_base64(img: Image) -> str:
         str: Base64-encoded image usable for OpenAI API vision
     """
     if not is_supported(img):
-        raise TypeError("Pillow image format is unsupported: {img.format}")
+        raise TypeError(f"Pillow image format is unsupported: {img.format}")
     
     buffer = BytesIO()
     img_format = img.format.upper()
