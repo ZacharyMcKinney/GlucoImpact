@@ -41,9 +41,9 @@ class TestFoodID(unittest.TestCase):
             fid.get_img("./requirements.txt")
     
     def test_is_supported_true(self):
-        self.assertEqual(True, fid.is_supported(self.img1))
-        self.assertEqual(True, fid.is_supported(self.img2))
-        self.assertEqual(True, fid.is_supported(self.img3))
+        self.assertEqual(True, fid.is_supported(fid.get_img(self.img1)))
+        self.assertEqual(True, fid.is_supported(fid.get_img(self.img2)))
+        self.assertEqual(True, fid.is_supported(fid.get_img(self.img3)))
     
     def test_is_supported_false(self):
         self.assertEqual(False, fid.is_supported(fid.get_img(self.unsupported_path)))
