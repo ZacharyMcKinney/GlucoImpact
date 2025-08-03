@@ -39,6 +39,7 @@ Users can understand how a particular food may affect them, and if they should a
 - `pillow`
 - `PyQt6`
 - `python-dotenv`
+- `rich` - For logging stylizing
 
 ## Future Prospects
 - Creating downloadable app for the store (main goal afterwards)
