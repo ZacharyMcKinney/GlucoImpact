@@ -16,4 +16,3 @@ matplotlib
 
 # Utilities
 python-dotenv
-rich

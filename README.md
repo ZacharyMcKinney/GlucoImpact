@@ -2,6 +2,7 @@
 
 This project allows a user to take a picture of their food and associate those foods with an increase in Blood Glucose Levels (BGL). 
 Users can understand how a particular food may affect them, and if they should avoid it.
+The purpose is streamline the process for monitoring how a food affects a person's BGL.
 
 ## Features
 - Helps a user know if a food could cause a blood glucose spike
@@ -39,7 +40,6 @@ Users can understand how a particular food may affect them, and if they should a
 - `pillow`
 - `PyQt6`
 - `python-dotenv`
-- `rich` - For logging stylizing
 
 ## Future Prospects
 - Creating downloadable app for the store (main goal afterwards)
