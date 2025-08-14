@@ -1,3 +1,5 @@
+## Copyright 2025, Zachary McKinney
+
 import sys
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtWidgets import (
@@ -24,8 +26,12 @@ class GlucoImpactGUI(QMainWindow):
         middle_layout = QHBoxLayout()
         # -- BUTTON SIDEBAR --
         vert_left_layout = QVBoxLayout()
+        vert_left_layout.addWidget(add_food_button := QPushButton("Login"))
+        add_food_button.clicked.connect(self.login)
+        vert_left_layout.addWidget(add_food_button := QPushButton("Add Food Entry by Picture"))
+        add_food_button.clicked.connect(self.add_food_picture)
         vert_left_layout.addWidget(add_food_button := QPushButton("Add Food Entry"))
-        add_food_button.clicked.connect(self.add_food)
+        add_food_button.clicked.connect(self.add_food_manually)
         vert_left_layout.addWidget(update_food_button := QPushButton("Update Food Entry"))
         update_food_button.clicked.connect(self.update_food)
         vert_left_layout.addWidget(remove_food_button := QPushButton("Remove Food Entry"))
@@ -60,7 +66,10 @@ class GlucoImpactGUI(QMainWindow):
         # self.user_label.setText(f"User:{self.user_name} User ID:{self.user_id}")
         pass
     
-    def add_food(self):
+    def add_food_picture(self):
+        pass
+
+    def add_food_manually(self):
         # dialogue prompt?
         # enter in food name, date, bgl change
         # need to hit a save button or back button
@@ -95,8 +104,7 @@ class GlucoImpactGUI(QMainWindow):
     
     
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    # window = GlucoImpactGUI(QApplication([]))    
+    app = QApplication(sys.argv) 
     window = GlucoImpactGUI()    
     window.show()
     app.exec()
