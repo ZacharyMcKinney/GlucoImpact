@@ -1,3 +1,5 @@
+## Copyright 2025, Zachary McKinney
+
 from dataclasses import dataclass
 
 @dataclass

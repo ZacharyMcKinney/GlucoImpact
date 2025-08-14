@@ -13,10 +13,6 @@ import tkinter as tk
 import logging
 log = logging.getLogger("food_id")
 
-# -- TODO --
-# quickly add support for other formats
-# add logs
-
 # --- SETUP ---
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
