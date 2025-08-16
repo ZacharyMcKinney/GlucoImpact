@@ -19,7 +19,7 @@ class DB_Manager:
         self._cursor.execute("""
                            CREATE TABLE IF NOT EXISTS users(
                                user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                               user_name TEXT)
+                               user_name TEXT UNIQUE)
                            """)
         self._cursor.execute("""
                            CREATE TABLE IF NOT EXISTS food_entry(
@@ -31,7 +31,7 @@ class DB_Manager:
         self._cursor.execute("""
                            CREATE TABLE IF NOT EXISTS food(
                                food_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                               food TEXT)
+                               food TEXT UNIQUE)
                            """)
         self._connection.commit()
         
@@ -57,7 +57,7 @@ class DB_Manager:
 
     def get_user_by_name(self, user_name: str):
         self._cursor.execute("SELECT * FROM users WHERE user_name = ?", (user_name,))
-        return self._cursor.fetchall()
+        return self._cursor.fetchone()
 
     def get_food_by_id(self, food_id: int):
         self._cursor.execute("SELECT * FROM food WHERE food_id = ?", (food_id,))
@@ -65,7 +65,7 @@ class DB_Manager:
 
     def get_food_by_name(self, food: str):
         self._cursor.execute("SELECT * FROM food WHERE food = ?", (food,))
-        return self._cursor.fetchall()
+        return self._cursor.fetchone()
 
     def get_food_entry_by_id(self, entry_id: int):
         self._cursor.execute("SELECT * FROM food_entry WHERE entry_id = ?", (entry_id,))
