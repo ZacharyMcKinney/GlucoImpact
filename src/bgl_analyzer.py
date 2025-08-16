@@ -1,48 +1,55 @@
 ## Copyright 2025, Zachary McKinney
 
 import db_manager as DB
+import food_id as FID
 import pandas as pd
-from datetime import date
 class BGL_Analyzer:
 
 
-    def __init__(self, user: str, database_name: str):
+    def __init__(self, user: str, database_loc: str):
         """
         Initiate an Analyzer object with a dedicated user and uses the database
         associated with the user
-        User is a string ID, and DB is a filename to a Sqlite file or new file
+        User is a int ID, and DB is a filename to a Sqlite file or new file
 
         Args:
-            user (str): user_id to be used in the database
+            user (str): user_name to be used in the database
             db (str): filename to Sqlite database
         """
 
-        self.db_manager = DB(database_name)
-        self._user = user
+        self.db_manager = DB(database_loc)
+        if not self.db_manager.get_user_by_name(user):
+            self.db_manager.add_user(user)
+        self.user = user
+        self.user_id = self.db_manager.get_user_name(self.user)[0]
 
-# --- Database Related ---   
-
-    #use lambda to make it easier to read and complete
-    #set={}
-    def add_food_bgl(self, foods, bgl_spike: float):
+    def add_bgl(self, food, bgl_delta: int):
         """
         Enters in a bgl spike for set of foods given into the local database
         
         Args:
             foods (set of strings): Identified foods consumed at a bgl spike
-            bgl_spike (int or float): Max bgl after food - avg bgl for the day
+            bgl_spike (int): Max bgl after food - avg bgl for the day
 
         Raises:
             Exception: Needs at least one food to be added
         """
-        if len(foods) <= 0:
-            raise Exception("Set of foods can't be empty")
+        if not self.db_manager.get_food_by_name(food):
+            self.db_manager.add_food(food)
+        food_id = self.db_manager.get_food_by_name(food)[0]
+        self.db_manager.add_food_entry(self.user_id, food_id, bgl_delta)
         
-# --- Calculations ---
+    def add_bgl_picture(self, picture_location, bgl_delta: int):
+        response = FID.identify_food(picture_location)
+        for food in response[1:]:
+            self.add_bgl(food, bgl_delta)
+
+    def get_describe_bgl(self, food_id: int) -> dict:
+        entries = self.db_manager.get_entries_by_user_and_food(self.user_id, food_id)
+        bgl_deltas = []
+        # {entry_id, user_id, food_id, bgl_delta}
+        for entry in entries:
+            bgl_deltas.append(entry[3])
+        df = pd.DataFrame(bgl_deltas, columns=["bgl_delta"])
+        return df.describe()
         
-    # def calculate_correlation(self, food_id: int, data) -> Type:
-    def calculate_correlation(self, food_id: int):
-        df = pd.DataFrame()
-        X = df[]
-        Y = df[]
-        pass
