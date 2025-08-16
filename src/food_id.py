@@ -25,6 +25,33 @@ _IMG_FORMATS = {"jpeg", "jpg", "png", "webp"}
 _CONVERSION_FORMATS = {"PNG", "JPEG", "WEBP", "BMP", "GIF", "TIFF"}
 OpenAI_Prompts = namedtuple('Prompts', ['system', 'assistant', 'user'])
 
+def load_openai_prompts(
+    system_path: str = "./prompts/openai_system2.txt",
+    assistant_path: str = "./prompts/openai_assistant2.txt",
+    user_path: str = "./prompts/openai_user1.txt" 
+) -> namedtuple:
+    """
+    Takes three files locations for system, assistant, and user paths.
+    The files are read and returned as a named tuple with each variable.
+    Private function _read_file for reading each file
+
+    Args:
+        system_path (str, optional): Text file to system prompt. Defaults to "./prompts/openai_system1.txt".
+        assistant_path (str, optional): Text file to assistant prompt. Defaults to "./prompts/openai_assistant1.txt".
+        user_path (str, optional): Text file to user prompt. Defaults to "./prompts/openai_user1.txt".
+
+    Returns:
+        namedtuple: Tuple named Prompts with system, assistant, and user values.
+    """
+    
+    def _read_file(path: str) -> str:
+        with open(path, 'r') as prompt:
+            return prompt.read()
+        
+    return OpenAI_Prompts(_read_file(system_path), _read_file(assistant_path), _read_file(user_path))
+
+openai_prompts: namedtuple = load_openai_prompts()
+
 # --- GET IMAGE ---
     
 def get_img_location() -> str:
@@ -143,7 +170,6 @@ def identify_food(file_location: str) -> str:
     if not is_supported(img):
         img = convert_img(img)
     b64_str = convert_pil_to_base64(img)
-    openai_prompts: namedtuple = _load_openai_prompts()
     chat_completion = openai.ChatCompletions.create(
         model="gpt-4o",
         messages=[
@@ -157,32 +183,8 @@ def identify_food(file_location: str) -> str:
                     }
                 ]}
         ],
-        max_tokens = 300,
+        max_tokens = 200,
         temperature = 0
     )
     return chat_completion.choices[0].message.content
         
-def _load_openai_prompts(
-    system_path: str = "./prompts/openai_system1.txt",
-    assistant_path: str = "./prompts/openai_assistant1.txt",
-    user_path: str = "./prompts/openai_user1.txt" 
-) -> namedtuple:
-    """
-    Takes three files locations for system, assistant, and user paths.
-    The files are read and returned as a named tuple with each variable.
-    Private function _read_file for reading each file
-
-    Args:
-        system_path (str, optional): Text file to system prompt. Defaults to "./prompts/openai_system1.txt".
-        assistant_path (str, optional): Text file to assistant prompt. Defaults to "./prompts/openai_assistant1.txt".
-        user_path (str, optional): Text file to user prompt. Defaults to "./prompts/openai_user1.txt".
-
-    Returns:
-        namedtuple: Tuple named Prompts with system, assistant, and user values.
-    """
-    
-    def _read_file(path: str) -> str:
-        with open(path, 'r') as prompt:
-            return prompt.read()
-        
-    return OpenAI_Prompts(_read_file(system_path), _read_file(assistant_path), _read_file(user_path))
