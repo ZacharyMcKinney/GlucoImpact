@@ -71,7 +71,11 @@ class DB_Manager:
         self._cursor.execute("SELECT * FROM food_entry WHERE entry_id = ?", (entry_id,))
         return self._cursor.fetchone()
 
-    def get_food_entries_by_user(self, user_id: int):
+    def get_entries_by_user_and_food(self, user_id:int, food_id: int):
+        self._cursor.execute("SELECT * FROM food_entry WHERE user_id =? AND food_id = ?", (user_id, food_id,))
+        return self._cursor.fetchall()
+
+    def get_entries_by_user(self, user_id: int):
         self._cursor.execute("SELECT * FROM food_entry WHERE user_id = ?", (user_id,))
         return self._cursor.fetchall()
     
