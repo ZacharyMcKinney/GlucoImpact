@@ -1,19 +1,18 @@
+## Copyright 2025, Zachary McKinney
+
 from dataclasses import dataclass
 
 @dataclass
-class Food_Item:
-    """Class for keeping track of a food's ID, name, and macros per serving"""
+class Food:
     food_id: int
     food: str
-    carbs: float
-    protein: float
-    fat: float
     
 @dataclass
-class Meal:
-    meal_id: int
+class Food_Entry:
+    entry_id: int
     user_id: int
-    food_items: list
+    food_id: int
+    bgl_delta: int
     
 @dataclass
 class User:

@@ -1,11 +1,11 @@
 ## Copyright 2025, Zachary McKinney
-"""
-Blood Glucose Analyzer (BGL) is a small project
-using SQLite, an OpenAI API, and Python.
-"""
-
- 
-#  import analyzer.py as Analyzer
- 
- 
- 
+import sys
+import glucoimpactgui as gui
+from PyQt6.QtWidgets import QApplication
+     
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = gui.GlucoImpactGUI()    
+    window.show()
+    app.exec()
+    
