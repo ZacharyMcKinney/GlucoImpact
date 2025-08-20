@@ -1,12 +1,12 @@
 ## Copyright 2025, Zachary McKinney
 
-import db_manager as DB
+from db_manager import DB_Manager
 import food_id as FID
 import pandas as pd
 class BGL_Analyzer:
 
 
-    def __init__(self, user: str, database_loc: str):
+    def __init__(self, user: str, database_loc: str = "./databases/default.db"):
         """
         Initiate an Analyzer object with a dedicated user and uses the database
         associated with the user
@@ -17,11 +17,11 @@ class BGL_Analyzer:
             db (str): filename to Sqlite database
         """
 
-        self.db_manager = DB(database_loc)
+        self.db_manager = DB_Manager(database_loc)
         if not self.db_manager.get_user_by_name(user):
             self.db_manager.add_user(user)
         self.user = user
-        self.user_id = self.db_manager.get_user_name(self.user)[0]
+        self.user_id = self.db_manager.get_user_by_name(self.user)[0]
 
     def add_bgl(self, food, bgl_delta: int):
         """
