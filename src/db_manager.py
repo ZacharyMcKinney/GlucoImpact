@@ -1,8 +1,6 @@
 ## Copyright 2025, Zachary McKinney
 
 import sqlite3
-from models import Food_Item, Meal, User
-from datetime import date
 
 class DB_Manager:
 # --- Class tools and Initiation ---
