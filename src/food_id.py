@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from PIL import Image
 import openai
 import tkinter as tk
+from tkinter import filedialog
 
 import logging
 log = logging.getLogger("food_id")
@@ -64,7 +65,7 @@ def get_img_location() -> str:
     root = tk.Tk()
     root.withdraw()
     log.info("Prompting user to select an image")
-    img_location = tk.filedialog.askopenfilename(
+    img_location = filedialog.askopenfilename(
         title="Select a food photo",
         filetypes=[("Image Files", "*.jpg *.jpeg *.png *.bmp *webp")]
     )
