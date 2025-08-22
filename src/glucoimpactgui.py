@@ -42,54 +42,117 @@ class GlucoImpactGUI(QMainWindow):
         layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         user_label = QLabel()
         user_label.setText("Enter in user name")
-        self.widget_user_name = QLineEdit()
-        self.widget_user_name.setMaximumSize(150, 50)
-        self.widget_user_name.setPlaceholderText("Login")
-        self.widget_login_submit = QPushButton()
-        self.widget_login_submit.clicked.connect(self.login)
-        self.widget_login_submit.setMaximumSize(200, 50)
-        self.widget_login_submit.setText("Submit")
+        self.username_widget = QLineEdit()
+        self.username_widget.setMaximumSize(150, 50)
+        self.username_widget.setPlaceholderText("Login")
+        login_button = QPushButton()
+        login_button.clicked.connect(self.login)
+        login_button.setMaximumSize(200, 50)
+        login_button.setText("Submit")
         self.login_status = QLabel()
         layout.addWidget(user_label)
-        layout.addWidget(self.widget_user_name)
-        layout.addWidget(self.widget_login_submit)
+        layout.addWidget(self.username_widget)
+        layout.addWidget(login_button)
         layout.addWidget(self.login_status)
         widget = QWidget()
         widget.setLayout(layout)
         return widget
     
     def make_widget_identify_pic(self):
-        pass
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        
+        prompt_label1 = QLabel()
+        prompt_label1.setText("Select the photo of the food(s) you want to add")
+        
+        file_button = QPushButton()
+        file_button.setText("Select Photo")
+        file_button.clicked.connect(self.set_picture_location)
+        
+        prompt_label2 = QLabel()
+        prompt_label2.setText("Submit picture for food identification")
+        
+        self.fid_status = QLabel()
+        
+        fid_button = QPushButton()
+        fid_button.setText("Submit")
+        fid_button.clicked.connect(self.refresh_fid_details)
+        
+        bgl_label = QLabel()
+        bgl_label.setText("Enter the change in blood glucose levels experienced (The BGL spike).")
+        bgl_spinbox = QSpinBox()
+        bgl_spinbox.setMinimum(0)
+        bgl_spinbox.setMaximum(250)
+        bgl_spinbox.setMaximumSize(150, 50)
+        
+        submit_widget = QPushButton()
+        submit_widget.clicked.connect(lambda: self.add_foods(self.fid_details, bgl_spinbox.text()))
+        submit_widget.setMaximumSize(200, 50)
+        submit_widget.setText("Submit foods to add to logs")
+        
+        layout.addWidget(prompt_label1)
+        layout.addWidget(file_button)
+        layout.addWidget(prompt_label2)
+        layout.addWidget(fid_button)
+        layout.addWidget(self.fid_status)
+        layout.addWidget(bgl_label)
+        layout.addWidget(bgl_spinbox)
+        layout.addWidget(submit_widget)
+        widget = QWidget()
+        widget.setLayout(layout)
+        return widget
+    
+    def set_picture_location(self):
+        self.picture_location = FID.get_img_location()
+        
+    def refresh_fid_details(self):
+        self.fid_details: str = FID.identify_food(self.picture_location)
+        self.fid_status.setText(self.fid_details)
+    
+    def add_foods(self, lines, bgl_delta):
+        if lines == "":
+            msg = QMessageBox()
+            msg.setWindowTitle("GlucoImpact: Error")
+            msg.setText("Please make sure foods were identified")
+            msg.exec()
+        if bgl_delta is None:
+            msg = QMessageBox()
+            msg.setWindowTitle("GlucoImpact: Error")
+            msg.setText("Please select a Blood Glucose Change")
+            msg.exec()
+        foods = lines.split("\n")
+        for food in foods[1:]:
+            self.add_food(food, bgl_delta)
     
     def make_widget_add_entry(self):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         
-        food_label = QLabel()
-        food_label.setText("Enter in the food you ate.")
-        widget_food = QLineEdit()
-        widget_food.setMaximumSize(150, 50)
-        widget_food.setPlaceholderText("Food")
+        food_prompt = QLabel()
+        food_prompt.setText("Enter in the food you ate.")
+        food_lineedit = QLineEdit()
+        food_lineedit.setMaximumSize(150, 50)
+        food_lineedit.setPlaceholderText("Food")
         
-        bgl_label = QLabel()
-        bgl_label.setText("Enter the change in blood glucose levels experienced (The BGL spike).")
-        widget_bgl = QSpinBox()
-        widget_bgl.setMinimum(0)
-        widget_bgl.setMaximum(350)
-        widget_bgl.setMaximumSize(150, 50)
+        bgl_prompt = QLabel()
+        bgl_prompt.setText("Enter the change in blood glucose levels experienced (The BGL spike).")
+        bgl_spinbox = QSpinBox()
+        bgl_spinbox.setMinimum(0)
+        bgl_spinbox.setMaximum(250)
+        bgl_spinbox.setMaximumSize(150, 50)
         
-        widget_submit = QPushButton()
-        widget_submit.clicked.connect(lambda: self.add_food(widget_food.text().strip().lower(), widget_bgl.value()))
-        widget_submit.setMaximumSize(200, 50)
-        widget_submit.setText("Submit")
+        submit_button = QPushButton()
+        submit_button.clicked.connect(lambda: self.add_food(food_lineedit.text().strip().lower(), bgl_spinbox.value()))
+        submit_button.setMaximumSize(200, 50)
+        submit_button.setText("Submit")
         
         self.entry_label = QLabel()
         
-        layout.addWidget(food_label)
-        layout.addWidget(widget_food)
-        layout.addWidget(bgl_label)
-        layout.addWidget(widget_bgl)
-        layout.addWidget(widget_submit)
+        layout.addWidget(food_prompt)
+        layout.addWidget(food_lineedit)
+        layout.addWidget(bgl_prompt)
+        layout.addWidget(bgl_spinbox)
+        layout.addWidget(submit_button)
         layout.addWidget(self.entry_label)
         widget = QWidget()
         widget.setLayout(layout)
@@ -99,30 +162,30 @@ class GlucoImpactGUI(QMainWindow):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         
-        entry_id_label = QLabel()
-        entry_id_label.setText("Enter in the entry ID you want to remove.")
-        widget_entry_id = QSpinBox()
-        widget_entry_id.setMinimum(0)
-        widget_entry_id.setMaximum(99999)
-        widget_entry_id.setMaximumSize(150, 50)
+        entry_id_prompt = QLabel()
+        entry_id_prompt.setText("Enter in the entry ID you want to remove.")
+        entry_id_spinbox = QSpinBox()
+        entry_id_spinbox.setMinimum(0)
+        entry_id_spinbox.setMaximum(99999)
+        entry_id_spinbox.setMaximumSize(150, 50)
         
-        widget_submit = QPushButton()
-        widget_submit.clicked.connect(lambda: self.remove_entry(widget_entry_id.text()))
-        widget_submit.setMaximumSize(200, 50)
-        widget_submit.setText("Submit")
+        submit_button = QPushButton()
+        submit_button.clicked.connect(lambda: self.remove_entry(entry_id_spinbox.text()))
+        submit_button.setMaximumSize(200, 50)
+        submit_button.setText("Submit")
         
-        refresh_btt = QPushButton()
-        refresh_btt.clicked.connect(self.refresh_entries_label)
-        refresh_btt.setMaximumSize(200, 50)
-        refresh_btt.setText("Refresh")
+        refresh_button = QPushButton()
+        refresh_button.clicked.connect(self.refresh_entries_label)
+        refresh_button.setMaximumSize(200, 50)
+        refresh_button.setText("Refresh")
         
         self.remove_entry_label = QLabel()
         self.entries = QLabel()
         
-        layout.addWidget(entry_id_label)
-        layout.addWidget(widget_entry_id)
-        layout.addWidget(widget_submit)
-        layout.addWidget(refresh_btt)
+        layout.addWidget(entry_id_prompt)
+        layout.addWidget(entry_id_spinbox)
+        layout.addWidget(submit_button)
+        layout.addWidget(refresh_button)
         layout.addWidget(self.remove_entry_label)
         layout.addWidget(self.entries)
         widget = QWidget()
@@ -141,13 +204,17 @@ class GlucoImpactGUI(QMainWindow):
         
     
     def make_widget_view_impact(self):
+        # show foods available. need refresh button
+        # need button display graph
+        # get describe stats
+        # 
         pass
     
     def make_widget_graph(self):
         pass
         
     def login(self):
-        user_name = self.widget_user_name.text().strip().lower()
+        user_name = self.username_widget.text().strip().lower()
         if not hasattr(self, "bgl_analyzer") or user_name != self.bgl_analyzer.user:
             self.user_name = user_name
             self.bgl_analyzer = BGL_Analyzer(self.user_name)
