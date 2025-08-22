@@ -34,7 +34,6 @@ The purpose is streamline the process for monitoring how a food affects a person
 ## Requirements
 - `Python 3.10+`
 - `matplotlib`
-- `numpy`
 - `openai`
 - `pandas`
 - `pillow`

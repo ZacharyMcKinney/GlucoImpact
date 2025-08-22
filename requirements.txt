@@ -2,7 +2,6 @@
 openai
 
 # Data management
-numpy
 pandas
 
 # GUI
