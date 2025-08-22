@@ -15,11 +15,10 @@ import logging
 log = logging.getLogger("food_id")
 
 # --- SETUP ---
-load_dotenv()
+load_dotenv(override=True)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 if not openai.api_key:
     raise openai.APIConnectionError("Was not able to load OpenAI API key. Value is None or blank")
-log.info("OpenAI key loaded successfully")
 
 # --- Constant and Defintions ---
 _IMG_FORMATS = {"jpeg", "jpg", "png", "webp"}
@@ -171,21 +170,16 @@ def identify_food(file_location: str) -> str:
     if not is_supported(img):
         img = convert_img(img)
     b64_str = convert_pil_to_base64(img)
-    chat_completion = openai.ChatCompletions.create(
+    chat_completion = openai.responses.create(
         model="gpt-4o",
-        messages=[
+        input=[
                 {"role": "system", "content": openai_prompts.system},
                 {"role": "assistant", "content": openai_prompts.assistant},
                 {"role": "user", "content": [
-                    {"type": "text", "text": openai_prompts.user},
-                    {
-                        "type": "image_url", 
-                        "image_url": {"url": b64_str}
-                    }
+                    {"type": "input_text", "text": openai_prompts.user},
+                    {"type": "input_image", "image_url": b64_str}
                 ]}
         ],
-        max_tokens = 200,
-        temperature = 0
     )
-    return chat_completion.choices[0].message.content
+    return chat_completion.output_text
         
