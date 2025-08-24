@@ -9,6 +9,7 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QPushButton,
     QVBoxLayout,
+    QHBoxLayout,
     QMainWindow,
     QStackedLayout,
     QTabWidget,
@@ -16,7 +17,10 @@ from PyQt6.QtWidgets import (
     QMessageBox
 )
 from bgl_analyzer import BGL_Analyzer
+from matplotlib.backends.backend_qtagg import FigureCanvas
+from matplotlib.figure import Figure
 import food_id as FID
+
 
 class GlucoImpactGUI(QMainWindow):
     
@@ -174,25 +178,26 @@ class GlucoImpactGUI(QMainWindow):
         submit_button.setMaximumSize(200, 50)
         submit_button.setText("Submit")
         
+        entries_label = QLabel()
+        
         refresh_button = QPushButton()
-        refresh_button.clicked.connect(self.refresh_entries_label)
+        refresh_button.clicked.connect(lambda: self.refresh_entries_label(entries_label))
         refresh_button.setMaximumSize(200, 50)
         refresh_button.setText("Refresh")
         
         self.remove_entry_label = QLabel()
-        self.entries = QLabel()
         
         layout.addWidget(entry_id_prompt)
         layout.addWidget(entry_id_spinbox)
         layout.addWidget(submit_button)
         layout.addWidget(refresh_button)
         layout.addWidget(self.remove_entry_label)
-        layout.addWidget(self.entries)
+        layout.addWidget(entries_label)
         widget = QWidget()
         widget.setLayout(layout)
         return widget
     
-    def refresh_entries_label(self):
+    def refresh_entries_label(self, entries_label):
         if hasattr(self, "bgl_analyzer"):
             entries = self.bgl_analyzer.db_manager.get_entries_by_user(self.user_id)
             log = ""
@@ -200,15 +205,64 @@ class GlucoImpactGUI(QMainWindow):
             for entry in entries:
                 food = self.bgl_analyzer.db_manager.get_food_by_id(entry[2])[1]
                 log += (f"Entry ID: {entry[0]}      Food: {food}       BGL: {entry[3]}\n")
-            self.entries.setText(log)
+            entries_label.setText(log)
         
     
     def make_widget_view_impact(self):
-        # show foods available. need refresh button
-        # need button display graph
-        # get describe stats
-        # 
-        pass
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        
+        prompt_label1 = QLabel()
+        prompt_label1.setText("Type the food to see impact you want to view")
+        
+        impact_input = QLineEdit()
+        impact_input.setMaximumSize(150, 50)
+        impact_input.setPlaceholderText("Food")
+        
+        prompt_label2 = QLabel()
+        prompt_label2.setText("Foods are below")
+        
+        list_of_foods = QLabel()
+        
+        refresh_button = QPushButton()
+        refresh_button.setText("Refresh")
+        refresh_button.clicked.connect(lambda: self.refresh_list_of_foods(list_of_foods))
+        
+        fig = Figure()
+        data_output = QLabel()
+        canvas = FigureCanvas(fig)
+        canvas.setMaximumSize(800, 600)
+        submit_widget = QPushButton()
+        submit_widget.clicked.connect(lambda: self.show_food_impact(impact_input.text(), fig, canvas, data_output))
+        submit_widget.setMaximumSize(200, 50)
+        submit_widget.setText("Submit food view impact")
+        
+        layout.addWidget(prompt_label1)
+        layout.addWidget(impact_input)
+        layout.addWidget(prompt_label2)
+        layout.addWidget(refresh_button)
+        layout.addWidget(list_of_foods)
+        layout.addWidget(submit_widget)
+        layout.addWidget(data_output)
+        layoutoutside = QHBoxLayout()
+        layoutoutside.addLayout(layout)
+        layoutoutside.addWidget(canvas)
+        widget = QWidget()
+        widget.setLayout(layoutoutside)
+        return widget
+    
+    def refresh_list_of_foods(self, widget):
+        if hasattr(self, "bgl_analyzer"):
+            foods = self.bgl_analyzer.db_manager.get_unique_foods_by_user(self.user_id)
+            text = ""
+            for food in foods:
+                text += food[0] +"\n"
+            widget.setText(text)
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("GlucoImpact: Error")
+            msg.setText("Please login to view foods")
+            msg.exec()
     
     def make_widget_graph(self):
         pass
@@ -242,17 +296,22 @@ class GlucoImpactGUI(QMainWindow):
             msg.setText("Please login to delete an entry")
             msg.exec()
             
-    def get_food_impact(self):
-        # shows graphs
-        # show avg bgl change after consuming food
-        # select food from list or search for food
-        # see optional notes?
-        pass
+    def show_food_impact(self, food, fig: Figure, canvas, data_output: QLabel):
+        food_id = self.bgl_analyzer.db_manager.get_food_by_name(food)[0]
+        entries = (self.bgl_analyzer.db_manager.get_entries_by_user_and_food(self.user_id, food_id))
+        bgl_data = [entry[3] for entry in entries]
+        fig.clear()
+        ax = fig.add_subplot()
+        ax.boxplot(bgl_data, vert=False)
+        ax.set_title(f"Box plot for food {food}")
+        ax.set_xlabel("Blood glucose in (mg/dL)")
         
-    def graph_foods(self):
-        # bgl of all foods
-        # filters
-        # toggle between line and bar chart
+        data_output.setText(self.bgl_analyzer.get_describe_bgl(food_id).to_string())
+        canvas.draw()
+        
+        
+    def graph_foods(self, fig):
+
         pass
     
 if __name__ == "__main__":
