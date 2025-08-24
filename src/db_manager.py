@@ -77,6 +77,14 @@ class DB_Manager:
         self._cursor.execute("SELECT * FROM food_entry WHERE user_id = ?", (user_id,))
         return self._cursor.fetchall()
     
+    def get_unique_foods_by_user(self, user_id: int):
+        self._cursor.execute("""
+                             SELECT DISTINCT food.food 
+                             FROM food_entry 
+                             JOIN food ON food_entry.food_id = food.food_id
+                             WHERE user_id = ?""", (user_id,))
+        return self._cursor.fetchall()
+    
 # --- Update Functions ---
 
     def update_user(self, user_id: int, user_name: str):
