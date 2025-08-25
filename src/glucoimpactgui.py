@@ -199,14 +199,16 @@ class GlucoImpactGUI(QMainWindow):
         return widget
     
     def refresh_entries_label(self, entries_label):
-        if hasattr(self, "bgl_analyzer"):
-            entries = self.bgl_analyzer.db_manager.get_entries_by_user(self.user_id)
-            log = ""
-            # entry = {entry_id, user_id, food_id, bgl_delta}
-            for entry in entries:
-                food = self.bgl_analyzer.db_manager.get_food_by_id(entry[2])[1]
-                log += (f"Entry ID: {entry[0]}      Food: {food}       BGL: {entry[3]}\n")
-            entries_label.setText(log)
+        if not self.is_logged_in():
+            self.throw_login_message()
+            return
+        entries = self.bgl_analyzer.db_manager.get_entries_by_user(self.user_id)
+        log = ""
+        # entry = {entry_id, user_id, food_id, bgl_delta}
+        for entry in entries:
+            food = self.bgl_analyzer.db_manager.get_food_by_id(entry[2])[1]
+            log += (f"Entry ID: {entry[0]}      Food: {food}       BGL: {entry[3]}\n")
+        entries_label.setText(log)
         
     
     def make_widget_view_impact(self):
@@ -253,17 +255,14 @@ class GlucoImpactGUI(QMainWindow):
         return widget
     
     def refresh_list_of_foods(self, widget):
-        if hasattr(self, "bgl_analyzer"):
-            foods = self.bgl_analyzer.db_manager.get_unique_foods_by_user(self.user_id)
-            text = ""
-            for food in foods:
-                text += food[0] +"\n"
-            widget.setText(text)
-        else:
-            msg = QMessageBox()
-            msg.setWindowTitle("GlucoImpact: Error")
-            msg.setText("Please login to view foods")
-            msg.exec()
+        if not self.is_logged_in():
+            self.throw_login_message()
+            return
+        foods = self.bgl_analyzer.db_manager.get_unique_foods_by_user(self.user_id)
+        text = ""
+        for food in foods:
+            text += food[0] +"\n"
+        widget.setText(text)
     
     def make_widget_graph(self):
         layout = QVBoxLayout()
@@ -335,25 +334,19 @@ class GlucoImpactGUI(QMainWindow):
             self.login_status.setText(f"Logged in as {self.user_name} and ID: {self.user_id}")
 
     def add_food(self, food: str, bgl_delta: int):
-        if hasattr(self, "bgl_analyzer"):
-            self.bgl_analyzer.add_bgl(food, bgl_delta)
-            self.entry_label.setText(f"Added food: {food} to database with BGL: {bgl_delta}")
-        else:
-            msg = QMessageBox()
-            msg.setWindowTitle("GlucoImpact: Error")
-            msg.setText("Please login to add foods")
-            msg.exec()
+        if not self.is_logged_in():
+            self.throw_login_message()
+            return
+        self.bgl_analyzer.add_bgl(food, bgl_delta)
+        self.entry_label.setText(f"Added food: {food} to database with BGL: {bgl_delta}")
     
     def remove_entry(self, entry_id: int):
-        if hasattr(self, "bgl_analyzer"):
-            self.bgl_analyzer.db_manager.delete_food_entry(entry_id)
-            self.remove_entry_label.setText(f"Removed Entry ID #{entry_id}")
-            self.refresh_entries_label()
-        else:
-            msg = QMessageBox()
-            msg.setWindowTitle("GlucoImpact: Error")
-            msg.setText("Please login to delete an entry")
-            msg.exec()
+        if not self.is_logged_in():
+            self.throw_login_message()
+            return
+        self.bgl_analyzer.db_manager.delete_food_entry(entry_id)
+        self.remove_entry_label.setText(f"Removed Entry ID #{entry_id}")
+        self.refresh_entries_label()
             
     def show_food_impact(self, food, fig: Figure, canvas, data_output: QLabel):
         if not self.is_logged_in():
