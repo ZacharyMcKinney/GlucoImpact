@@ -15,6 +15,7 @@ The purpose is streamline the process for monitoring how a food affects a person
 
 ## Usage
 1. **Start the program** by running 'main.py'.
+   - Sign in as user1 to get an account preloaded with food data
 2. **Enter in a food entry** with two options. Then add the BGL delta.
    - Option 1: Manually enter in food.
    - Option 2: Select a photo. An OpenAI API key will need to be set in Food_ID
