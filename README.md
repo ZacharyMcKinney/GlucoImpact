@@ -11,14 +11,18 @@ The purpose is streamline the process for monitoring how a food affects a person
 - Python for easier data visualization
 - Data visualization to display how foods may spike BGL
 - Track BGL deltas for each food item or meal
+- Streamline the process of logging food
 
 ## Usage
 1. **Start the program** by running 'main.py'.
 2. **Enter in a food entry** with two options. Then add the BGL delta.
-   - Select a photo. An OpenAI API key will need to be set in Food_ID
-   - Manually enter in food.
-3. **Input BGL data** with spreadsheet data of BGL and time.
-4. The app will:
+   - Option 1: Manually enter in food.
+   - Option 2: Select a photo. An OpenAI API key will need to be set in Food_ID
+3. **Look at food Impact** with two options.
+   - Option 1: Look up a single food and analyze its BGL impact
+   - Option 2: Look at all the foods on a single graph
+4. **Remove food entries if needed**
+#### The app will:
    - Store the food and BGL delta in a local SQLite database 
    - Graph a food and it's BGL data
    - Graph all foods and their averages 
@@ -40,11 +44,23 @@ The purpose is streamline the process for monitoring how a food affects a person
 - `PyQt6`
 - `python-dotenv`
 
+## To Do
+- Polish PyQt6 interface
+- Background and styling
+- Interface asks for API key or has option (no need to enter into code manually)
+- Scroll bar for food entry lists
+- Autofill and search for foods
+- Documentation for most functions and function hints
+- Remove Magic numbers and magic list indexing (enum needed) in GUI
+- Reduce GUI bloat and improve organization
+- Separate usage between bgl_analzyer and db_manager
+- Food filter (no blank spaces. capitlize food in gui)
+
 ## Future Prospects
-- Creating downloadable app for the store (main goal afterwards)
 - Replace SQLite with a cloud-based storage
 - Secure way of logging in
 - Connect to CGM devices so users don't manually enter in BGL delta
+- Creating downloadable app for the store
 
 ## Author
 - Zachary McKinney
