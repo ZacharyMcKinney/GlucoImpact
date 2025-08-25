@@ -20,6 +20,7 @@ from bgl_analyzer import BGL_Analyzer
 from matplotlib.backends.backend_qtagg import FigureCanvas
 from matplotlib.figure import Figure
 import food_id as FID
+import numpy as NP
 
 
 class GlucoImpactGUI(QMainWindow):
@@ -265,8 +266,66 @@ class GlucoImpactGUI(QMainWindow):
             msg.exec()
     
     def make_widget_graph(self):
-        pass
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         
+        prompt_label1 = QLabel()
+        prompt_label1.setText("Refresh to see food impact graph")
+
+        fig = Figure()
+        data_output = QLabel()
+        canvas = FigureCanvas(fig)
+        submit_widget = QPushButton()
+        submit_widget.clicked.connect(lambda: self.graph_foods(fig, canvas))
+        submit_widget.setMaximumSize(200, 50)
+        submit_widget.setText("Refresh")
+        
+        layout.addWidget(prompt_label1)
+        layout.addWidget(submit_widget)
+        layout.addWidget(data_output)
+        layout.addWidget(canvas)
+        widget = QWidget()
+        widget.setLayout(layout)
+        return widget
+        
+    def graph_foods(self, fig, canvas):
+        if not self.is_logged_in():
+            self.throw_login_message()
+            return
+        fig.clear()
+        ax = fig.add_subplot(111)
+        entries = self.bgl_analyzer.db_manager.get_entries_by_user(self.user_id)
+        food_data = {}
+        for entry in entries:
+            food_id = entry[2]
+            bgl_delta: int = entry[3]
+            food_name: str = self.bgl_analyzer.db_manager.get_food_by_id(food_id)[1]
+            if food_name not in food_data:
+                food_data[food_name] = []
+            food_data[food_name].append(int(bgl_delta))
+             
+        foods = list(food_data.keys())
+        medians = []
+        stds = []
+        for val in food_data.values():
+            medians.append(NP.median(val))
+            stds.append(NP.std(val))
+            
+        ax.bar(foods, medians, yerr=stds, capsize=5)
+        ax.set_ylabel("Median Blood Glucose Change (mg/dL)")
+        ax.set_title("BGL Impact Comparison Across Foods")
+        ax.set_xticklabels(foods, rotation=45, ha="right")
+        canvas.draw()
+    
+    def is_logged_in(self):
+        return hasattr(self, "bgl_analyzer")
+    
+    def throw_login_message(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("GlucoImpact: Error")
+        msg.setText("Please login to view foods")
+        msg.exec()
+    
     def login(self):
         user_name = self.username_widget.text().strip().lower()
         if not hasattr(self, "bgl_analyzer") or user_name != self.bgl_analyzer.user:
@@ -297,6 +356,9 @@ class GlucoImpactGUI(QMainWindow):
             msg.exec()
             
     def show_food_impact(self, food, fig: Figure, canvas, data_output: QLabel):
+        if not self.is_logged_in():
+            self.throw_login_message()
+            return
         food_id = self.bgl_analyzer.db_manager.get_food_by_name(food)[0]
         entries = (self.bgl_analyzer.db_manager.get_entries_by_user_and_food(self.user_id, food_id))
         bgl_data = [entry[3] for entry in entries]
@@ -308,11 +370,6 @@ class GlucoImpactGUI(QMainWindow):
         
         data_output.setText(self.bgl_analyzer.get_describe_bgl(food_id).to_string())
         canvas.draw()
-        
-        
-    def graph_foods(self, fig):
-
-        pass
     
 if __name__ == "__main__":
     app = QApplication(sys.argv) 
